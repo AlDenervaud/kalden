@@ -9,7 +9,7 @@ description = "A small reusable Python library"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
-  {name = "Alois Denervaud", email = ""}
+  {name = "Alois Denervaud", email = "myemail@gmail.com"}
 ]
 dependencies = []
 

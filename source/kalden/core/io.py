@@ -25,6 +25,7 @@ def ensure_dir_exists(dir_path: str | os.PathLike) -> None:
         dir_path : str | os.PathLike
             Path to a directory should be ensured to exist.
     """
+    dir_path = Path(dir_path)
     if not dir_path.is_dir():
         dir_path.mkdir(parents=True, exist_ok=True)
 

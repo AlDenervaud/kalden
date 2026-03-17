@@ -12,6 +12,7 @@ import chardet
 import shutil
 from pathlib import Path
 
+
 def hello(name: str) -> str:
     return f"Hello, {name}!"
 
@@ -45,21 +46,55 @@ def is_dir_empty(dir_path: str) -> bool:
     """Return True if the directory is empty, False otherwise."""
     return len(os.listdir(dir_path)) == 0
 
-def empty_dir(folder_path):
-    folder = Path(folder_path)
+# def empty_dir(folder_path):
+#     folder = Path(folder_path)
 
-    if not folder.exists():
-        raise FileNotFoundError(f"Folder does not exist: {folder}")
+#     if not folder.exists():
+#         raise FileNotFoundError(f"Folder does not exist: {folder}")
 
-    if not folder.is_dir():
-        raise NotADirectoryError(f"Not a folder: {folder}")
+#     if not folder.is_dir():
+#         raise NotADirectoryError(f"Not a folder: {folder}")
 
-    for item in folder.iterdir():
-        if item.is_dir():
-            shutil.rmtree(item)
+#     for item in folder.iterdir():
+#         if item.is_dir():
+#             shutil.rmtree(item)
+#         else:
+#             item.unlink()
+
+def empty_dir(dir_path: str | os.PathLike, missing_ok: bool = False) -> None:
+    """
+    Remove all contents of a directory without deleting the directory itself.
+
+    Parameters
+    ----------
+    dir_path : str | os.PathLike
+        Path to the directory to empty.
+    missing_ok : bool, default=False
+        If True, do nothing when the directory does not exist.
+        If False, raise FileNotFoundError.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the directory does not exist and `missing_ok` is False.
+    NotADirectoryError
+        If `dir_path` exists but is not a directory.
+    """
+    path = Path(dir_path)
+
+    if not path.exists():
+        if missing_ok:
+            return
+        raise FileNotFoundError(f"Directory does not exist: {path}")
+
+    if not path.is_dir():
+        raise NotADirectoryError(f"Path is not a directory: {path}")
+
+    for child in path.iterdir():
+        if child.is_dir():
+            shutil.rmtree(child)
         else:
-            item.unlink()
-
+            child.unlink()
 
 # -------------------------  FILE  ------------------------------------
 def file_exists(file_path: str | os.PathLike) -> bool:

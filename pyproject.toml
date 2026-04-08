@@ -9,9 +9,14 @@ description = "A small reusable Python library"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
-  {name = "Alois Denervaud", email = "myemail@gmail.com"}
+    { name = "Alois Denervaud", email = "myemail@gmail.com" }
 ]
-dependencies = []
+dependencies = [
+    "ezdxf",
+    "pandas",
+    "shapely",
+    "geopandas",
+]
 
 [tool.setuptools]
 package-dir = {"" = "source"}

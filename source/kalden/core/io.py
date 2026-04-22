@@ -10,10 +10,15 @@ Created: 2026-01-15
 import os
 import chardet
 import shutil
+import tempfile
 from pathlib import Path
+from typing import Optional, Union
+
+PathLike = Union[str, Path]
 
 
 def hello(name: str) -> str:
+    """For testing purposes"""
     return f"Hello, {name}!"
 
 # -------------------------  DIRECTORY  ------------------------------------
@@ -111,6 +116,43 @@ def file_exists(file_path: str | os.PathLike) -> bool:
     """
     return Path(file_path).is_file()
 
+def create_temp_dir(prefix: str = "tmp_", base_dir: Optional[PathLike] = None) -> Path:
+    """
+    Create a temporary directory and return its path.
+
+    Parameters
+    ----------
+    prefix : str, optional
+        Prefix for the temporary directory name.
+    base_dir : str or Path, optional
+        Parent directory where the temp directory should be created.
+        If None, the system temp location is used.
+
+    Returns
+    -------
+    Path
+        Path to the created temporary directory.
+    """
+    temp_dir = tempfile.mkdtemp(prefix=prefix, dir=str(base_dir) if base_dir else None)
+    return Path(temp_dir)
+
+
+def delete_temp_dir(temp_dir: PathLike, ignore_errors: bool = False) -> None:
+    """
+    Delete a temporary directory and all its contents.
+
+    Parameters
+    ----------
+    temp_dir : str or Path
+        Path to the temporary directory.
+    ignore_errors : bool, optional
+        If True, suppress deletion errors.
+
+    Returns
+    -------
+    None
+    """
+    shutil.rmtree(Path(temp_dir), ignore_errors=ignore_errors)
 
 def detect_file_encoding(file_path):
     """Détecte l'encodage d'un fichier"""

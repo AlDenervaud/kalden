@@ -16,6 +16,11 @@ dependencies = [
     "pandas",
     "shapely",
     "geopandas",
+    "numpy",
+    "plotly",
+    "mikeio",
+    "fiona",
+    "chardet",
 ]
 
 [tool.setuptools]

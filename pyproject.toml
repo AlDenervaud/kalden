@@ -21,6 +21,10 @@ dependencies = [
     "mikeio",
     "fiona",
     "chardet",
+    "tqdm",
+    "networkx",
+    "matplotlib",
+    "mikeplus",
 ]
 
 [project.optional-dependencies]

@@ -9,7 +9,7 @@ description = "Utilities"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
-    { name = "Alois Denervaud", email = "myemail@gmail.com" }
+    { name = "", email = "" }
 ]
 dependencies = [
     "ezdxf",

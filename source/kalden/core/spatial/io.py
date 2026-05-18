@@ -4,7 +4,11 @@ import geopandas as gpd
 import sqlite3
 from datetime import datetime
 from pathlib import Path
+from typing import Optional, Union
 from importlib.resources import files
+
+PathLike = Union[str, Path]
+
 
 def read_spatial_file(
     path: PathLike,

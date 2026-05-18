@@ -6,6 +6,69 @@ from datetime import datetime
 from pathlib import Path
 from importlib.resources import files
 
+def read_spatial_file(
+    path: PathLike,
+    layer: Optional[str] = None,
+    target_crs: Optional[Union[str, int]] = None,
+) -> gpd.GeoDataFrame:
+    """
+    Read a spatial file into a GeoDataFrame.
+
+    Supports:
+    - Shapefile: .shp
+    - GeoPackage: .gpkg
+
+    Parameters
+    ----------
+    path : str or pathlib.Path
+        Path to the spatial file.
+    layer : str, optional
+        Layer name. Required for multi-layer GeoPackages.
+    target_crs : str or int, optional
+        CRS to reproject to after reading, e.g. "EPSG:2056".
+
+    Returns
+    -------
+    geopandas.GeoDataFrame
+    """
+    path = Path(path)
+
+    if not path.exists():
+        raise FileNotFoundError(f"Spatial file not found: {path}")
+
+    suffix = path.suffix.lower()
+
+    if suffix == ".shp":
+        gdf = gpd.read_file(path)
+
+    elif suffix == ".gpkg":
+        if layer is None:
+            layers = list_spatial_layers(path)
+
+            if len(layers) == 1:
+                layer = layers[0]
+            else:
+                raise ValueError(
+                    "GeoPackage contains multiple layers. "
+                    f"Please specify one of: {layers}"
+                )
+
+        gdf = gpd.read_file(path, layer=layer)
+
+    else:
+        raise ValueError(
+            f"Unsupported spatial file type '{suffix}'. "
+            "Supported types are .shp and .gpkg."
+        )
+
+    if gdf.crs is None:
+        raise ValueError(f"Spatial file has no CRS: {path}")
+
+    if target_crs is not None:
+        gdf = gdf.to_crs(target_crs)
+
+    return gdf
+
 def export_gdf(gdf, export_path, layer_name=None, export_file_type="gpkg", overwrite=False):
   """
   Safely export a GeoDataFrame to GeoPackage or Shapefile.
